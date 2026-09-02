@@ -41,13 +41,7 @@ app.use(express.json());
 
 // CORS
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Ini mengizinkan otomatis semua origin frontend yang mengakses tanpa diblokir
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-role-mode', 'role-mode'],
