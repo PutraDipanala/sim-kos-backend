@@ -40,13 +40,18 @@ app.use(helmet());
 app.use(express.json());
 
 // CORS
-app.use(
-  cors({
-    origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000',
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-role-mode', 'role-mode'],
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-role-mode', 'role-mode'],
+}));
 
 // ====== SERVE STATIC FILES (untuk uploads) ======
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
